@@ -44,14 +44,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         searchBar = (EditText)root.findViewById(R.id.location_search);
-        Log.d("헤이", String.valueOf(searchBar.getText()));
         searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_DONE) {
-                    Log.d("헤이", (String) textView.getText());
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    homeViewModel.setCenterByText(textView.getText().toString(),mMap,getContext());
+                    return false;    //true 리턴 시 포커스 안풀림
                 }
-                return true;
+                return false;
             }
         });
         return root;
