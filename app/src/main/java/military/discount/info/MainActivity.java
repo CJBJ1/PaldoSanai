@@ -33,12 +33,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import military.discount.info.ui.gallery.GalleryFragment;
+import military.discount.info.ui.favorite.FavoriteFragment;
 import military.discount.info.ui.home.HomeFragment;
 import military.discount.info.ui.send.SendFragment;
 import military.discount.info.ui.share.ShareFragment;
-import military.discount.info.ui.slideshow.SlideshowFragment;
-import military.discount.info.ui.tools.ToolsFragment;
+import military.discount.info.ui.info.InfoFragment;
+import military.discount.info.ui.shopReg.ShopRegFragment;
 
 import android.view.Menu;
 import android.view.inputmethod.EditorInfo;
@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send)
+                R.id.nav_home, R.id.nav_favorite, R.id.nav_info,
+                R.id.nav_shopReg, R.id.nav_share, R.id.nav_send)
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -122,12 +122,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_home) {
             navController.navigate(R.id.nav_home);
-        } else if (id == R.id.nav_gallery) {
-            navController.navigate(R.id.nav_gallery);
-        } else if (id == R.id.nav_slideshow) {
-            navController.navigate(R.id.nav_slideshow);
-        } else if (id == R.id.nav_tools) {
-            navController.navigate(R.id.nav_tools);
+        } else if (id == R.id.nav_favorite) {
+            navController.navigate(R.id.nav_favorite);
+        } else if (id == R.id.nav_info) {
+            navController.navigate(R.id.nav_info);
+        } else if (id == R.id.nav_shopReg) {
+            navController.navigate(R.id.nav_shopReg);
         } else if (id == R.id.nav_share) {
             navController.navigate(R.id.nav_share);
         } else if (id == R.id.nav_send) {

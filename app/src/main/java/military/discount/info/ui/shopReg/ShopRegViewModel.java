@@ -1,16 +1,16 @@
-package military.discount.info.ui.slideshow;
+package military.discount.info.ui.shopReg;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SlideshowViewModel extends ViewModel {
+public class ShopRegViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public SlideshowViewModel() {
+    public ShopRegViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is slideshow fragment");
+        mText.setValue("시설 등록");
     }
 
     public LiveData<String> getText() {

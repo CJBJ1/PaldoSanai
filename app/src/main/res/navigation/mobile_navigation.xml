@@ -12,22 +12,22 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="military.discount.info.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_favorite"
+        android:name="military.discount.info.ui.favorite.FavoriteFragment"
+        android:label="자주 가는 장소"
+        tools:layout="@layout/fragment_favorite" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="military.discount.info.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_info"
+        android:name="military.discount.info.ui.info.InfoFragment"
+        android:label="개인 정보 관리"
+        tools:layout="@layout/fragment_info" />
 
     <fragment
-        android:id="@+id/nav_tools"
-        android:name="military.discount.info.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        android:id="@+id/nav_shopReg"
+        android:name="military.discount.info.ui.shopReg.ShopRegFragment"
+        android:label="시설 등록"
+        tools:layout="@layout/fragment_shopreg" />
 
     <fragment
         android:id="@+id/nav_share"

@@ -38,12 +38,12 @@
     <LinearLayout
         android:layout_width="54dp"
         android:layout_height="101dp"
-        android:layout_marginBottom="240dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.047"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/location_search">
 
         <Button
             android:id="@+id/button_plus"

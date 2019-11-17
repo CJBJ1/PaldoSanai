@@ -1,4 +1,4 @@
-package military.discount.info.ui.slideshow;
+package military.discount.info.ui.info;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,17 +13,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import military.discount.info.R;
 
-public class SlideshowFragment extends Fragment {
+public class InfoFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private InfoViewModel infoViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                ViewModelProviders.of(this).get(SlideshowViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(this, new Observer<String>() {
+        infoViewModel =
+                ViewModelProviders.of(this).get(InfoViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_info, container, false);
+        final TextView textView = root.findViewById(R.id.text_info);
+        infoViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
