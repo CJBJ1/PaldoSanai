@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private AppBarConfiguration mAppBarConfiguration;
     private NavController navController;
+    private LatLng centerPoint;
+    private int zoomLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +123,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String title = "My Location";
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
+        //fragment 쌓임 방지 (임시)
+        navController.popBackStack(R.id.nav_home,false);
+
         if (id == R.id.nav_home) {
+            navController.popBackStack();
             navController.navigate(R.id.nav_home);
         } else if (id == R.id.nav_favorite) {
             navController.navigate(R.id.nav_favorite);
