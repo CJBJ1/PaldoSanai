@@ -30,6 +30,8 @@ public class HomeViewModel extends ViewModel {
         return mText;
     }
 
+
+    //상단바 검색시 주소 -> 좌표로 변환
     public void setCenterByText(String address , GoogleMap mMap, Context context){
         Geocoder geocoder = new Geocoder(context);
 
@@ -45,7 +47,9 @@ public class HomeViewModel extends ViewModel {
             e.printStackTrace();
         }
 
-        LatLng center = new LatLng(resultList.get(0).getLatitude(),resultList.get(0).getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+        if(!resultList.isEmpty()) {
+            LatLng center = new LatLng(resultList.get(0).getLatitude(), resultList.get(0).getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+        }
     }
 }
