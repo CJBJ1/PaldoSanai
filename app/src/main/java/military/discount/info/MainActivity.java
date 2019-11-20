@@ -34,6 +34,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 import military.discount.info.ui.favorite.FavoriteFragment;
 import military.discount.info.ui.home.HomeFragment;
 import military.discount.info.ui.send.SendFragment;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupWithNavController(navigationView, navController);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.bringToFront();
+
 
     }
 
