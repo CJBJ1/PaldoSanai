@@ -13,6 +13,10 @@ public class FavoriteViewModel extends ViewModel {
         mText.setValue("자주 가는 장소");
     }
 
+    public void setRecyclerView(){
+
+    }
+
     public LiveData<String> getText() {
         return mText;
     }

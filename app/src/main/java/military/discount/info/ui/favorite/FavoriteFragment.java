@@ -6,12 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import military.discount.info.R;
+import military.discount.info.SimpleTextAdapter;
 
 public class FavoriteFragment extends Fragment {
 
@@ -22,13 +27,18 @@ public class FavoriteFragment extends Fragment {
         favoriteViewModel =
                 ViewModelProviders.of(this).get(FavoriteViewModel.class);
         View root = inflater.inflate(R.layout.fragment_favorite, container, false);
-        final TextView textView = root.findViewById(R.id.text_favorite);
-        favoriteViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
+        ArrayList<String> list = new ArrayList<>();
+        for (int i=0; i<100; i++) {
+            list.add(String.format("TEXT %d", i)) ;
+        }
+        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
+        RecyclerView recyclerView = root.findViewById(R.id.recycler_item) ;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext())) ;
+        // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
+        SimpleTextAdapter adapter = new SimpleTextAdapter(list) ;
+        recyclerView.setAdapter(adapter) ;
+
         return root;
     }
 }
