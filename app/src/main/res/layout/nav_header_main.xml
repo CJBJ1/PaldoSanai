@@ -16,7 +16,7 @@
         android:id="@+id/imageView"
         android:layout_width="112dp"
         android:layout_height="107dp"
-        android:background="@drawable/oval_background_orange_fill"
+        android:background="@drawable/oval_background_orange_blank"
         android:src="@drawable/ic_goodgun"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing" />

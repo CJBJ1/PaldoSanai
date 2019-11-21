@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.widget.EditText;
+import android.app.Activity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -59,10 +60,10 @@ public class HomeViewModel extends ViewModel {
         }
     }
 
-    public void showShopInfo(FragmentManager fm){
+    public void showShopInfo(FragmentManager fm,LatLng centerPoint){
         fm.popBackStack();
 
-        Fragment inf = new InfoFragment();
+        Fragment inf = new InfoFragment(centerPoint);
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_bottom,R.anim.enter_to_bottom,R.anim.enter_from_bottom,R.anim.enter_to_bottom);
         transaction.add(R.id.shopInfo, inf);
@@ -70,15 +71,22 @@ public class HomeViewModel extends ViewModel {
         transaction.addToBackStack(null);
     }
 
-    public void setMap(GoogleMap mMap, final FragmentManager fm){
+    public void setMap(final GoogleMap mMap, final FragmentManager fm){
 
         GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                showShopInfo(fm);
+                showShopInfo(fm,marker.getPosition());
                 return false;
             }
         };
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+            }
+        });
 
 
         //초기 중심점 중앙대로 설정
@@ -88,7 +96,7 @@ public class HomeViewModel extends ViewModel {
                 .position(center)
                 .title("마커");
         mMap.addMarker(markerOptions);
-        mMap.addMarker(new MarkerOptions().position(new LatLng(37.504000,126.957000)));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(37.404235,126.545156)));
         mMap.setOnMarkerClickListener(markerClickListener);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));

@@ -33,11 +33,42 @@ import military.discount.info.R;
 
 public class InfoFragment extends Fragment  {
 
+    private Button likeButton;
+    private LatLng markerPosition;
+    private TextView textview1;
+    private TextView textview2;
+    private boolean like;
+
+    public InfoFragment(LatLng markerPosition){
+        this.markerPosition = markerPosition;
+    }
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              final ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.shop_info, container, false);
+        like = false;
+        likeButton = (Button)root.findViewById(R.id.like_button);
+        likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(like == false) {
+                    Log.d("좋아요", "좋아요 눌림");
+                    like = true;
+                    likeButton.setBackgroundResource(R.drawable.oval_background_orange_fill);
+                }
+                else{
+                    Log.d("좋아요", "좋아요 취소");
+                    like = false;
+                    likeButton.setBackgroundResource(R.drawable.oval_background_orange_blank);
+                }
+            }
+        });
+
+        textview1 = (TextView)root.findViewById(R.id.textView2);
+        textview2 = (TextView)root.findViewById(R.id.textView3);
+        textview1.setText(markerPosition.latitude + "");
+        textview2.setText(markerPosition.longitude + "");
         return root;
     }
 
