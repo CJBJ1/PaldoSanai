@@ -27,6 +27,8 @@ import military.discount.info.R;
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
+    private Activity parentActivity;
+    private ArrayList<MarkerOptions> markerList = new ArrayList<>();
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
@@ -37,6 +39,10 @@ public class HomeViewModel extends ViewModel {
         return mText;
     }
 
+
+    public void setParentActivity(Activity activity){
+        parentActivity = activity;
+    }
 
     //상단바 검색시 주소 -> 좌표로 변환
     public void setCenterByText(String address , GoogleMap mMap, Context context){
@@ -76,7 +82,7 @@ public class HomeViewModel extends ViewModel {
         GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                showShopInfo(fm,marker.getPosition());
+                showShopInfo(fm, marker.getPosition());
                 return false;
             }
         };

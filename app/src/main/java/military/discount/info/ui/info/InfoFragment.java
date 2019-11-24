@@ -22,7 +22,7 @@ public class InfoFragment extends Fragment {
         infoViewModel =
                 ViewModelProviders.of(this).get(InfoViewModel.class);
         View root = inflater.inflate(R.layout.fragment_info, container, false);
-        final TextView textView = root.findViewById(R.id.text_info);
+        final TextView textView = root.findViewById(R.id.info_text);
         infoViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

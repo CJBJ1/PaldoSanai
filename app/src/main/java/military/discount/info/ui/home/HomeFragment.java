@@ -53,6 +53,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                              final ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel.setParentActivity(getActivity());
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         fm = getChildFragmentManager();
         mapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
@@ -94,8 +95,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 mMap.animateCamera(CameraUpdateFactory.zoomOut());
             }
         });
-
-
 
         return root;
     }
