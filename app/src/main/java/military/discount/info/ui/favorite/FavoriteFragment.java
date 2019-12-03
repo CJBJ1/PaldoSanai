@@ -1,5 +1,7 @@
 package military.discount.info.ui.favorite;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ public class FavoriteFragment extends Fragment {
     private FavoriteViewModel favoriteViewModel;
     private Button deleteButton;
     private Button addButton;
+    private int REQUEST_FAVORITE = 100;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +44,8 @@ public class FavoriteFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getContext(), FavoriteSelectActivity.class);
+                getActivity().startActivityForResult(intent,REQUEST_FAVORITE);
             }
         });
 

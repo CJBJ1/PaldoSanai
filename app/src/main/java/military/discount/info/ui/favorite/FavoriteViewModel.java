@@ -24,7 +24,7 @@ public class FavoriteViewModel extends ViewModel {
 
     public void setRecyclerView(RecyclerView recyclerView, Context context){
         ArrayList<String> list = new ArrayList<>();
-        for (int i=0; i<100; i++) {
+        for (int i=0; i<10; i++) {
             list.add(String.format("TEXT %d", i)) ;
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(context)) ;

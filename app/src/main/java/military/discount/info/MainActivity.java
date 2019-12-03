@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ShopList shopList;
     private JSONArray jsArr;
     private int zoomLevel;
+    private int REQUEST_FAVORITE = 100;
+    private int RESULT_FAVORITE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,5 +244,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d("request",requestCode + "");
+        Log.d("result",resultCode + "");
+        if (requestCode == REQUEST_FAVORITE) {
+            if (resultCode == RESULT_FAVORITE ) {
+                Log.d("정확한 전달",data.getExtras().getDouble("lat")+ "");
+                Toast.makeText(getApplicationContext(),"전달!",Toast.LENGTH_LONG).show();
+            } else {   // RESULT_CANCEL
+                Log.d("뭐지","뭐지");
+                Toast.makeText(getApplicationContext(),"실패",Toast.LENGTH_LONG).show();
+            }
+//        } else if (requestCode == REQUEST_ANOTHER) {
+//            ...
+        }
+
+    }
 
 }

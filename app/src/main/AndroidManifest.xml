@@ -21,6 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="military.discount.info.ui.favorite.FavoriteSelectActivity"
+            android:label="FavoriteSelectActivity">
+        </activity>
+
         <activity
             android:name="military.discount.info.login.SignInActivity"
             android:label="@string/name_sign_in_activity"
