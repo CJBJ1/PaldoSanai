@@ -28,6 +28,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -50,6 +51,7 @@ import military.discount.info.ui.shopReg.ShopRegFragment;
 
 import android.view.Menu;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private JSONArray jsArr;
     private int zoomLevel;
     private int REQUEST_FAVORITE = 100;
-    private int RESULT_FAVORITE = 100;
+    private int RESULT_FAVORITE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

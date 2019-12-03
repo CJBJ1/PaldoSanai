@@ -16,6 +16,7 @@ import military.discount.info.SimpleTextAdapter;
 public class FavoriteViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
+    private SimpleTextAdapter adapter;
 
     public FavoriteViewModel() {
         mText = new MutableLiveData<>();
@@ -29,7 +30,7 @@ public class FavoriteViewModel extends ViewModel {
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(context)) ;
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-        SimpleTextAdapter adapter = new SimpleTextAdapter(list) ;
+        adapter = new SimpleTextAdapter(list) ;
         //recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.line_divider));
         recyclerView.addItemDecoration(new RecyclerDecoration(20));
         recyclerView.setHasFixedSize(true);
@@ -40,4 +41,5 @@ public class FavoriteViewModel extends ViewModel {
     public LiveData<String> getText() {
         return mText;
     }
+    public SimpleTextAdapter getAdapter() {return adapter;}
 }

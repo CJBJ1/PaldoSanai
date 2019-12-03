@@ -1,5 +1,6 @@
 package military.discount.info.login;
 
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -20,6 +21,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Demonstrates retrieving an ID token for the current Google user.
@@ -64,7 +79,6 @@ public class IdTokenActivity extends AppCompatActivity implements
                 .build();
         // [END configure_signin]
 
-        // Build GoogleAPIClient with the Google Sign-In API and the above options.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
@@ -72,6 +86,7 @@ public class IdTokenActivity extends AppCompatActivity implements
         // Show an account picker to let the user choose a Google account from the device.
         // If the GoogleSignInOptions only asks for IDToken and/or profile and/or email then no
         // consent screen will be shown here.
+
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_GET_TOKEN);
     }
@@ -98,7 +113,23 @@ public class IdTokenActivity extends AppCompatActivity implements
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             String idToken = account.getIdToken();
 
-            // TODO(developer): send ID Token to server and validate
+            /*HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost("https://yourbackend.example.com/tokensignin");
+
+            try {
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("idToken", idToken));
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = httpClient.execute(httpPost);
+                int statusCode = response.getStatusLine().getStatusCode();
+                final String responseBody = EntityUtils.toString(response.getEntity());
+                Log.i(TAG, "Signed in as: " + responseBody);
+            } catch (ClientProtocolException e) {
+                Log.e(TAG, "Error sending ID token to backend.", e);
+            } catch (IOException e) {
+                Log.e(TAG, "Error sending ID token to backend.", e);
+            }*/
 
             updateUI(account);
         } catch (ApiException e) {

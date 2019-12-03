@@ -61,7 +61,6 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Vi
             @Override
             public void onClick(View view) {
                 mData.remove(position); //or some other task
-                positions.remove(position);
                 notifyDataSetChanged();
             }
         });
@@ -71,5 +70,10 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Vi
     @Override
     public int getItemCount() {
         return mData.size() ;
+    }
+
+
+    public ArrayList<String> getmData() {
+        return mData;
     }
 }
