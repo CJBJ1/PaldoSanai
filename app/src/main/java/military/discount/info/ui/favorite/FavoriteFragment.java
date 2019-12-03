@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ import military.discount.info.SimpleTextAdapter;
 public class FavoriteFragment extends Fragment {
 
     private FavoriteViewModel favoriteViewModel;
+    private Button deleteButton;
+    private Button addButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -31,20 +34,15 @@ public class FavoriteFragment extends Fragment {
                 ViewModelProviders.of(this).get(FavoriteViewModel.class);
         View root = inflater.inflate(R.layout.fragment_favorite, container, false);
 
-        ArrayList<String> list = new ArrayList<>();
-        for (int i=0; i<100; i++) {
-            list.add(String.format("TEXT %d", i)) ;
-        }
-        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
         RecyclerView recyclerView = root.findViewById(R.id.recycler_item) ;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext())) ;
-        // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-        SimpleTextAdapter adapter = new SimpleTextAdapter(list) ;
-        //recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.line_divider));
-        recyclerView.addItemDecoration(new RecyclerDecoration(20));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter) ;
+        favoriteViewModel.setRecyclerView(recyclerView,getContext());
+
+        addButton = (Button)root.findViewById(R.id.button_favorite_add);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
 
         return root;
     }

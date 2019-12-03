@@ -29,7 +29,8 @@
                 android:title="1" />
             <item
                 android:id="@+id/nav_send"
-                android:title="2" />
+                android:icon="@drawable/log_in"
+                android:title="로그인" />
         </menu>
     </item>
 

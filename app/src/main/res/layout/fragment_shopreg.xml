@@ -6,16 +6,243 @@
     android:layout_height="match_parent"
     tools:ignore="MissingDefaultResource">
 
-    <TextView
-        android:id="@+id/text_shopReg"
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TextView
+            android:id="@+id/text_shopReg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="20dp"
+            android:text="시설 등록 요청"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_facilityName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="시설명"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="30dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editText_facilityName"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:hint="내용을 입력하세요."
+                android:textSize="17sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  위치  "
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="30dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editText_location"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:hint="내용을 입력하세요."
+                android:textSize="17sp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_businessNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사업자 번호"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="47dp"
+                android:layout_marginRight="13dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editText_businessNum"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:hint="내용을 입력하세요."
+                android:textSize="17sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  기간  "
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="30dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editText_date"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:hint="ex) 19.11.11 ~ 19.12.12"
+                android:textSize="17sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_phoneNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="연락처"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="30dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editText_phoneNum"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:hint="내용을 입력하세요."
+                android:textSize="17sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_homepage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="홈페이지"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="54dp"
+                android:layout_marginRight="23dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editText_homepage"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:hint="내용을 입력하세요."
+                android:textSize="17sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상세설명"
+                android:textSize="15sp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="54dp"
+                android:layout_marginRight="23dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editText_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:ems="10"
+                android:hint="내용을 입력하세요."
+                android:textSize="17sp"/>
+
+        </LinearLayout>
+
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/check_icon"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:id="@+id/text_revise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="등록요청"
+            android:textSize="18sp"
+            android:layout_gravity="center_horizontal"
+            />
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

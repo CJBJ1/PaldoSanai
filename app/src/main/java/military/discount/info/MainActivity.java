@@ -1,5 +1,8 @@
 package military.discount.info;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,6 +38,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.slidingpanelayout.widget.SlidingPaneLayout;
+import military.discount.info.login.IdTokenActivity;
+import military.discount.info.login.ServerAuthCodeActivity;
+import military.discount.info.login.SignInActivity;
 import military.discount.info.ui.favorite.FavoriteFragment;
 import military.discount.info.ui.home.HomeFragment;
 import military.discount.info.ui.send.SendFragment;
@@ -48,20 +54,37 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
-{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private NavController navController;
     private LatLng centerPoint;
+    private ShopList shopList;
+    private JSONArray jsArr;
     private int zoomLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        shopList = (ShopList)getApplicationContext();
+        String url = "http://54.180.83.196:8888/places";
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -85,6 +108,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupWithNavController(navigationView, navController);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.bringToFront();
+
+        NetworkTask networkTask = new NetworkTask(url, null);
+        networkTask.execute();
 
 
     }
@@ -116,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -126,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
         //fragment 쌓임 방지 (임시)
-        navController.popBackStack(R.id.nav_home,false);
+        navController.popBackStack(R.id.nav_home, false);
 
         if (id == R.id.nav_home) {
             navController.popBackStack();
@@ -140,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_share) {
             navController.navigate(R.id.nav_share);
         } else if (id == R.id.nav_send) {
-            navController.navigate(R.id.nav_send);
+            startActivity(new Intent(this, IdTokenActivity.class));
         }
 
 
@@ -155,18 +180,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    /*public void setUpFragmentArray(){
-        Fragment homeFragment = new HomeFragment();
-        Fragment galleryFragment = new GalleryFragment();
-        Fragment slideshowFragment = new SlideshowFragment();
-        Fragment toolsFragment = new ToolsFragment();
-        Fragment shareFragment = new ShareFragment();
-        Fragment sendFragment = new SendFragment();
-        fragmentArrayList.add(homeFragment);
-        fragmentArrayList.add(galleryFragment);
-        fragmentArrayList.add(slideshowFragment);
-        fragmentArrayList.add(toolsFragment);
-        fragmentArrayList.add(shareFragment);
-        fragmentArrayList.add(sendFragment);
-    }*/
+    public class NetworkTask extends AsyncTask<Void, Void, String> {
+
+        private String url;
+        private ContentValues values;
+
+        public NetworkTask(String url, ContentValues values) {
+
+            this.url = url;
+            this.values = values;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            String result = "basic"; // 요청 결과를 저장할 변수.
+           RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
+           result = requestHttpURLConnection.request(url,values);
+           return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                int index=0;
+                jsArr = new JSONArray(s);
+                while(index != jsArr.length()){
+                    parseShop(jsArr,index);
+                    index++;
+                }
+                Log.d("완료",shopList.getShopArrayList().get(400).getId());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void parseShop(JSONArray jsonArray,int index){
+            Shop shop = new Shop();
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(index);
+                shop.setId(jsonObject.getString("id"));
+                shop.setName(jsonObject.getString("name"));
+                shop.setAddress(jsonObject.getString("address"));
+                shop.setDescription(jsonObject.getString("description"));
+                shop.setPhone(jsonObject.getString("phone"));
+                shop.setPage_url(jsonObject.getString("page_url"));
+                shop.setStart_date(jsonObject.getString("start_date"));
+                shop.setEnd_date(jsonObject.getString("end_date"));
+                shop.setInformation(jsonObject.getString("information"));
+                shop.setRegistration_num(jsonObject.getString("registration_num"));
+                shop.setActive(jsonObject.getString("active"));
+
+                shopList.getShopArrayList().add(shop);
+                Log.d("하하",shop.getName());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
+
 }

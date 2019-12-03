@@ -75,6 +75,8 @@ public class HomeViewModel extends ViewModel {
         transaction.add(R.id.shopInfo, inf);
         transaction.commit();
         transaction.addToBackStack(null);
+
+
     }
 
     public void setMap(final GoogleMap mMap, final FragmentManager fm){
@@ -106,5 +108,11 @@ public class HomeViewModel extends ViewModel {
         mMap.setOnMarkerClickListener(markerClickListener);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+    }
+
+    public void setMarkerList(final GoogleMap mMap,String lat,String lng){
+        MarkerOptions markerOptions = new MarkerOptions();
+        mMap.addMarker(markerOptions);
+        mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(lat),Double.parseDouble(lng))));
     }
 }
