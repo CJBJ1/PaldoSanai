@@ -16,6 +16,7 @@ import military.discount.info.SimpleTextAdapter;
 public class FavoriteViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
+    private ArrayList<String> list = new ArrayList<>();
     private SimpleTextAdapter adapter;
 
     public FavoriteViewModel() {
@@ -24,7 +25,6 @@ public class FavoriteViewModel extends ViewModel {
     }
 
     public void setRecyclerView(RecyclerView recyclerView, Context context){
-        ArrayList<String> list = new ArrayList<>();
         for (int i=0; i<10; i++) {
             list.add(String.format("TEXT %d", i)) ;
         }

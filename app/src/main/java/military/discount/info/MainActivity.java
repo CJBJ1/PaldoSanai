@@ -85,8 +85,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         shopList = (ShopList)getApplicationContext();
-        String url = "http://54.180.83.196:8888/places";
+
+
+        Intent intent = new Intent(this, LoadingActivity.class);
+        startActivity(intent);
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -112,10 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupWithNavController(navigationView, navController);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.bringToFront();
-
-        NetworkTask networkTask = new NetworkTask(url, null);
-        networkTask.execute();
-
 
     }
 
@@ -214,7 +214,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     parseShop(jsArr,index);
                     index++;
                 }
-                Log.d("완료",shopList.getShopArrayList().get(400).getId());
+                for(int i = 0;i<10;i++){
+                    shopList.getShopArrayList().get(i).setLat((37.504198 + 0.05*i) + "");
+                    shopList.getShopArrayList().get(i).setLng((126.956875 + 0.05*i) + "");
+                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -250,13 +254,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().getFragments().get(0);
+        FavoriteFragment favoriteFragment = (FavoriteFragment)navHostFragment.getChildFragmentManager().getFragments().get(0);
+
         Log.d("request",requestCode + "");
         Log.d("result",resultCode + "");
         if (requestCode == REQUEST_FAVORITE) {
             if (resultCode == RESULT_FAVORITE ) {
                 Log.d("정확한 전달",data.getExtras().getDouble("lat")+ "");
                 Toast.makeText(getApplicationContext(),"전달!",Toast.LENGTH_LONG).show();
-            } else {   // RESULT_CANCEL
+                favoriteFragment.getFavoriteViewModel().getAdapter().getmData().add("어쩔");
+                favoriteFragment.getFavoriteViewModel().getAdapter().notifyDataSetChanged();
+            } else {   // RESULT_CANCEL.
                 Log.d("뭐지","뭐지");
                 Toast.makeText(getApplicationContext(),"실패",Toast.LENGTH_LONG).show();
             }

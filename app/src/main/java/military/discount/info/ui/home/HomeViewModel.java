@@ -1,8 +1,11 @@
 package military.discount.info.ui.home;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.EditText;
 import android.app.Activity;
 
@@ -11,6 +14,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +29,22 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import military.discount.info.GeoLocation;
+import military.discount.info.MainActivity;
 import military.discount.info.R;
+import military.discount.info.RequestHttpURLConnection;
+import military.discount.info.Shop;
+import military.discount.info.ShopList;
 
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
     private Activity parentActivity;
     private ArrayList<MarkerOptions> markerList = new ArrayList<>();
+    private ShopList shopList;
+    private Context context;
+    private JSONArray jsArr;
+    private GoogleMap mMap;
+    private FragmentManager fm;
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
@@ -66,10 +82,10 @@ public class HomeViewModel extends ViewModel {
         }
     }
 
-    public void showShopInfo(FragmentManager fm,LatLng centerPoint){
+    public void showShopInfo(FragmentManager fm,int index){
         fm.popBackStack();
 
-        Fragment inf = new InfoFragment(centerPoint);
+        Fragment inf = new InfoFragment(shopList.getShopArrayList().get(index));
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_bottom,R.anim.enter_to_bottom,R.anim.enter_from_bottom,R.anim.enter_to_bottom);
         transaction.add(R.id.shopInfo, inf);
@@ -79,12 +95,24 @@ public class HomeViewModel extends ViewModel {
 
     }
 
-    public void setMap(final GoogleMap mMap, final FragmentManager fm){
+    public void setNetwork(final GoogleMap mMap, final FragmentManager fm,Context context){
+        shopList = (ShopList)context;
+
+        this.mMap=mMap;
+        this.fm = fm;
+        this.context = context;
+
+        String url = "http://54.180.83.196:8888/places";
+        NetworkTask networkTask = new NetworkTask(url, null);
+        networkTask.execute();
+    }
+
+    public void setMap(final GoogleMap mMap, final FragmentManager fm,Context context){
 
         GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                showShopInfo(fm, marker.getPosition());
+                showShopInfo(fm, Integer.parseInt(marker.getTag().toString()));
                 return false;
             }
         };
@@ -95,6 +123,12 @@ public class HomeViewModel extends ViewModel {
 
             }
         });
+
+        for (int index =0;index<10;index++) {
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(new LatLng(Double.parseDouble(shopList.getShopArrayList().get(index).getLat()), Double.parseDouble(shopList.getShopArrayList().get(index).getLng())));
+            mMap.addMarker(markerOptions).setTag(index);
+        }
 
 
         //초기 중심점 중앙대로 설정
@@ -108,11 +142,76 @@ public class HomeViewModel extends ViewModel {
         mMap.setOnMarkerClickListener(markerClickListener);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
     }
 
-    public void setMarkerList(final GoogleMap mMap,String lat,String lng){
-        MarkerOptions markerOptions = new MarkerOptions();
-        mMap.addMarker(markerOptions);
-        mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(lat),Double.parseDouble(lng))));
+    public class NetworkTask extends AsyncTask<Void, Void, String> {
+
+        private String url;
+        private ContentValues values;
+
+        public NetworkTask(String url, ContentValues values) {
+
+            this.url = url;
+            this.values = values;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            String result = "basic"; // 요청 결과를 저장할 변수.
+            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
+            result = requestHttpURLConnection.request(url,values);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                int index=0;
+
+                jsArr = new JSONArray(s);
+                while(index != jsArr.length()){
+                    parseShop(jsArr,index);
+                    index++;
+                }
+                for(int i = 0;i<10;i++){
+                    shopList.getShopArrayList().get(i).setLat((37.504198 + 0.05*i) + "");
+                    shopList.getShopArrayList().get(i).setLng((126.956875 + 0.05*i) + "");
+                }
+                setMap(mMap,fm,context);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        public void parseShop(JSONArray jsonArray,int index){
+            Shop shop = new Shop();
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(index);
+                shop.setId(jsonObject.getString("id"));
+                shop.setName(jsonObject.getString("name"));
+                shop.setAddress(jsonObject.getString("address"));
+                shop.setDescription(jsonObject.getString("description"));
+                shop.setPhone(jsonObject.getString("phone"));
+                shop.setPage_url(jsonObject.getString("page_url"));
+                shop.setStart_date(jsonObject.getString("start_date"));
+                shop.setEnd_date(jsonObject.getString("end_date"));
+                shop.setInformation(jsonObject.getString("information"));
+                shop.setRegistration_num(jsonObject.getString("registration_num"));
+                shop.setActive(jsonObject.getString("active"));
+
+                shopList.getShopArrayList().add(shop);
+                Log.d("하하",shop.getName());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
+
 }

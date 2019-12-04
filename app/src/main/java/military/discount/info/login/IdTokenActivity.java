@@ -113,8 +113,8 @@ public class IdTokenActivity extends AppCompatActivity implements
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             String idToken = account.getIdToken();
 
-            /*HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("https://yourbackend.example.com/tokensignin");
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost("http://54.180.83.196:8888/auth/login/google-oath2");
 
             try {
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
@@ -129,7 +129,7 @@ public class IdTokenActivity extends AppCompatActivity implements
                 Log.e(TAG, "Error sending ID token to backend.", e);
             } catch (IOException e) {
                 Log.e(TAG, "Error sending ID token to backend.", e);
-            }*/
+            }
 
             updateUI(account);
         } catch (ApiException e) {

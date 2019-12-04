@@ -2,6 +2,7 @@ package military.discount.info.ui.home;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -30,22 +31,26 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import military.discount.info.R;
+import military.discount.info.Shop;
+import military.discount.info.ShopList;
 
 public class InfoFragment extends Fragment  {
 
     private Button likeButton;
     private LatLng markerPosition;
+    private Shop shop;
     private TextView textview1;
     private TextView textview2;
     private boolean like;
 
-    public InfoFragment(LatLng markerPosition){
-        this.markerPosition = markerPosition;
+    public InfoFragment(Shop shop){
+        this.shop = shop;
     }
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              final ViewGroup container, Bundle savedInstanceState) {
 
+        ShopList shopList = (ShopList)getActivity().getApplicationContext();
         View root = inflater.inflate(R.layout.shop_info, container, false);
         like = false;
         likeButton = (Button)root.findViewById(R.id.like_button);
@@ -67,8 +72,8 @@ public class InfoFragment extends Fragment  {
 
         textview1 = (TextView)root.findViewById(R.id.textView2);
         textview2 = (TextView)root.findViewById(R.id.textView3);
-        textview1.setText(markerPosition.latitude + "");
-        textview2.setText(markerPosition.longitude + "");
+        textview1.setText(shop.getName());
+        textview2.setText(shop.getAddress());
         return root;
     }
 

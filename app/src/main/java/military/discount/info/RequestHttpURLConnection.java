@@ -46,8 +46,7 @@ public class RequestHttpURLConnection {
         try {
             URL url = new URL(_url);
             urlConn = (HttpURLConnection) url.openConnection();
-
-            Log.d("URL읽어와~","예에쓰");
+            
             urlConn.setReadTimeout(10000);
             urlConn.setConnectTimeout(15000);
             urlConn.setRequestMethod("GET");
@@ -57,9 +56,7 @@ public class RequestHttpURLConnection {
 
 
 
-            Log.d("URL읽어와~",urlConn.getResponseCode() + "");
             if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Log.d("URL읽어와~",urlConn.getResponseCode() + "");
                 return null;
             }
 

@@ -1,7 +1,9 @@
 package military.discount.info.ui.home;
 
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,6 +27,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.Nullable;
@@ -37,6 +43,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import military.discount.info.MainActivity;
 import military.discount.info.R;
+import military.discount.info.RequestHttpURLConnection;
+import military.discount.info.Shop;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
@@ -58,6 +66,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         fm = getChildFragmentManager();
         mapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         subLayout = (LinearLayout)root.findViewById(R.id.shopInfo);
         //상단 검색바
         searchBar = (EditText)root.findViewById(R.id.location_search);
@@ -103,9 +112,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        homeViewModel.setMap(mMap,fm);
-
+        homeViewModel.setNetwork(mMap,fm,getActivity().getApplicationContext());
     }
+
 
     
 }
