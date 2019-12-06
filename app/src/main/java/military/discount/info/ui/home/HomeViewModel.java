@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +31,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import military.discount.info.GeoLocation;
 import military.discount.info.MainActivity;
+import military.discount.info.MyItem;
 import military.discount.info.R;
 import military.discount.info.RequestHttpURLConnection;
 import military.discount.info.Shop;
@@ -45,6 +47,7 @@ public class HomeViewModel extends ViewModel {
     private JSONArray jsArr;
     private GoogleMap mMap;
     private FragmentManager fm;
+    private ClusterManager<MyItem> mClusterManager;
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
@@ -108,6 +111,10 @@ public class HomeViewModel extends ViewModel {
     }
 
     public void setMap(final GoogleMap mMap, final FragmentManager fm,Context context){
+
+
+        mClusterManager = new ClusterManager<MyItem>(context, mMap);
+        mMap.setOnCameraIdleListener(mClusterManager);
 
         GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
             @Override

@@ -1,6 +1,9 @@
 package military.discount.info;
 
-public class Shop {
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
+public class Shop  {
 
     private String id;
     private String name;

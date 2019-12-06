@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/location_search"
+        android:id="@+id/location_search_favorite"
         android:layout_width="283dp"
         android:layout_height="48dp"
         android:background="@drawable/round"
@@ -43,7 +43,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.047"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/location_search">
+        app:layout_constraintTop_toTopOf="@+id/location_search_favorite">
 
         <Button
             android:id="@+id/button_plus"

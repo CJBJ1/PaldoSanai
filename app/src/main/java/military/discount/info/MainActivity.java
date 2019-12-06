@@ -184,67 +184,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public class NetworkTask extends AsyncTask<Void, Void, String> {
-
-        private String url;
-        private ContentValues values;
-
-        public NetworkTask(String url, ContentValues values) {
-
-            this.url = url;
-            this.values = values;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            String result = "basic"; // 요청 결과를 저장할 변수.
-           RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
-           result = requestHttpURLConnection.request(url,values);
-           return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            try {
-                int index=0;
-                jsArr = new JSONArray(s);
-                while(index != jsArr.length()){
-                    parseShop(jsArr,index);
-                    index++;
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public void parseShop(JSONArray jsonArray,int index){
-            Shop shop = new Shop();
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(index);
-                shop.setId(jsonObject.getString("id"));
-                shop.setName(jsonObject.getString("name"));
-                shop.setAddress(jsonObject.getString("address"));
-                shop.setDescription(jsonObject.getString("description"));
-                shop.setPhone(jsonObject.getString("phone"));
-                shop.setPage_url(jsonObject.getString("page_url"));
-                shop.setStart_date(jsonObject.getString("start_date"));
-                shop.setEnd_date(jsonObject.getString("end_date"));
-                shop.setInformation(jsonObject.getString("information"));
-                shop.setRegistration_num(jsonObject.getString("registration_num"));
-                shop.setActive(jsonObject.getString("active"));
-
-                shopList.getShopArrayList().add(shop);
-                Log.d("하하",shop.getName());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

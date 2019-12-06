@@ -1,11 +1,15 @@
 package military.discount.info.login;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import military.discount.info.R;
+import military.discount.info.RequestHttpURLConnection;
+import military.discount.info.Shop;
 
 import android.util.Log;
 import android.view.View;
@@ -21,6 +25,10 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ServerAuthCodeActivity extends AppCompatActivity implements
         View.OnClickListener {
@@ -93,6 +101,8 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 String authCode = account.getServerAuthCode();
+                Log.d("코드",authCode);
+                String url = "" + authCode;
                 updateUI(account);
 
             } catch (ApiException e) {
@@ -144,5 +154,32 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
                 revokeAccess();
                 break;
         }
+    }
+
+    public class NetworkTaskAuth extends AsyncTask<Void, Void, String> {
+
+        private String url;
+        private ContentValues values;
+
+        public NetworkTaskAuth(String url, ContentValues values) {
+
+            this.url = url;
+            this.values = values;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String result = "basic";
+            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
+            result = requestHttpURLConnection.request(url, values);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+        }
+
     }
 }

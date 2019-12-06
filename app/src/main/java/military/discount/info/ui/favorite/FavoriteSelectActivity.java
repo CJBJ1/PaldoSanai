@@ -4,11 +4,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,6 +34,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -38,6 +46,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import military.discount.info.GeoLocation;
 import military.discount.info.MainActivity;
 import military.discount.info.R;
 import military.discount.info.ShopList;
@@ -52,6 +61,9 @@ public class FavoriteSelectActivity extends FragmentActivity implements OnCamera
     Marker activeMarker;
     private Button addButton;
     private Button backButton;
+    private Button plusButton;
+    private Button minusButton;
+    private EditText searchBar;
     private int RESULT_FAVORITE = 101;
     private int RESULT_FAVORITE_FAIL = 102;
     String name = new String();
@@ -86,6 +98,52 @@ public class FavoriteSelectActivity extends FragmentActivity implements OnCamera
                 Intent intent = new Intent();
                 setResult(RESULT_FAVORITE_FAIL ,intent);
                 finish();
+            }
+        });
+
+        searchBar =(EditText)findViewById(R.id.location_search_favorite);
+        searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    Geocoder geocoder = new Geocoder(getApplicationContext());
+                    ArrayList<GeoLocation> resultList = new ArrayList<>();
+                    try {
+                        List<Address> list = geocoder.getFromLocationName(textView.getText().toString(), 10);
+
+                        for (Address addr : list) {
+                            resultList.add(new GeoLocation(addr.getLatitude(), addr.getLongitude()));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(!resultList.isEmpty()) {
+                        LatLng center = new LatLng(resultList.get(0).getLatitude(), resultList.get(0).getLongitude());
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+                    }
+                    return false;
+                }
+                return false;
+            }
+        });
+        plusButton = (Button)findViewById(R.id.button_plus);
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //클릭시 줌 인
+                mMap.animateCamera(CameraUpdateFactory.zoomIn());
+            }
+        });
+
+        //축소 버튼
+        minusButton = (Button)findViewById(R.id.button_minus);
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //클릭시 줌 아웃
+                mMap.animateCamera(CameraUpdateFactory.zoomOut());
             }
         });
     }
