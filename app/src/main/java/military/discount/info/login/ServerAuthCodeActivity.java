@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import military.discount.info.R;
 import military.discount.info.RequestHttpURLConnection;
 import military.discount.info.Shop;
+import military.discount.info.ShopList;
 
 import android.util.Log;
 import android.view.View;
@@ -38,12 +39,14 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
 
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mAuthCodeTextView;
+    private ShopList shopList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        shopList = (ShopList)getApplicationContext();
         mAuthCodeTextView = findViewById(R.id.detail);
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -54,6 +57,7 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
 
 
         //팔도사나이 serverClientId
+        updateUI();
         String serverClientId = getString(R.string.server_client_id);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
@@ -73,10 +77,11 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
     }
 
     private void signOut() {
+        shopList.setAccessToken(null);
         mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                updateUI(null);
+                updateUI();
             }
         });
     }
@@ -86,7 +91,7 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
+                        updateUI();
                     }
                 });
     }
@@ -102,28 +107,28 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 String authCode = account.getServerAuthCode();
                 Log.d("코드",authCode);
-                String url = "" + authCode;
-                updateUI(account);
+                String url = "http://8dosanai.com:8888/register-by-token/google-oauth2/?auth_code=" + authCode;
+                Log.d("잘보냈나?",url);
+                NetworkTaskAuth networkTaskAuth = new NetworkTaskAuth(url, null);
+                networkTaskAuth.execute();
 
             } catch (ApiException e) {
                 Log.w(TAG, "Sign-in failed", e);
-                updateUI(null);
+                updateUI();
             }
         }
     }
 
-    private void updateUI(@Nullable GoogleSignInAccount account) {
-        if (account != null) {
+    private void updateUI() {
+        if (shopList.getAccessToken() != null) {
             ((TextView) findViewById(R.id.status)).setText(R.string.signed_in);
 
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
 
-            String authCode = account.getServerAuthCode();
-            mAuthCodeTextView.setText(getString(R.string.auth_code_fmt, authCode));
+            mAuthCodeTextView.setText("로그인 됨");
         } else {
-            ((TextView) findViewById(R.id.status)).setText(R.string.signed_out);
-            mAuthCodeTextView.setText(getString(R.string.auth_code_fmt, "null"));
+            ((TextView) findViewById(R.id.status)).setText("로그인 필요");
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
@@ -178,7 +183,9 @@ public class ServerAuthCodeActivity extends AppCompatActivity implements
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
+            Log.d("하하하하하", s);
+            shopList.setAccessToken(s);
+            updateUI();
         }
 
     }

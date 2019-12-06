@@ -10,6 +10,7 @@ public class ShopList extends Application {
 
     private ArrayList<Shop> shopArrayList = new ArrayList<>(500);
     private LatLng centerPoint = null;
+    private String accessToken = null;
 
     public ArrayList<Shop> getShopArrayList() {
         return shopArrayList;
@@ -26,4 +27,9 @@ public class ShopList extends Application {
     public LatLng getCenterPoint(){
         return centerPoint;
     }
+
+    public void setAccessToken(String token){
+        this.accessToken=token;
+    }
+    public String getAccessToken(){return accessToken;}
 }
