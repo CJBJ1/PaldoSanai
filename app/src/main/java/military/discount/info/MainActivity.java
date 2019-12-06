@@ -95,14 +95,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_share) {
             navController.navigate(R.id.nav_share);
         } else if (id == R.id.nav_send) {
-            startActivity(new Intent(this, IdTokenActivity.class));
+            startActivity(new Intent(this, ServerAuthCodeActivity.class));
         }
 
 
@@ -197,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         protected String doInBackground(Void... params) {
-
             String result = "basic"; // 요청 결과를 저장할 변수.
            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
            result = requestHttpURLConnection.request(url,values);
@@ -213,10 +212,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 while(index != jsArr.length()){
                     parseShop(jsArr,index);
                     index++;
-                }
-                for(int i = 0;i<10;i++){
-                    shopList.getShopArrayList().get(i).setLat((37.504198 + 0.05*i) + "");
-                    shopList.getShopArrayList().get(i).setLng((126.956875 + 0.05*i) + "");
                 }
 
             } catch (JSONException e) {
@@ -263,7 +258,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (resultCode == RESULT_FAVORITE ) {
                 Log.d("정확한 전달",data.getExtras().getDouble("lat")+ "");
                 Toast.makeText(getApplicationContext(),"전달!",Toast.LENGTH_LONG).show();
-                favoriteFragment.getFavoriteViewModel().getAdapter().getmData().add("어쩔");
+
+                LatLng latLng = new LatLng(data.getExtras().getDouble("lat"),data.getExtras().getDouble("lng"));
+                favoriteFragment.getFavoriteViewModel().getAdapter().getPositions().add(latLng);
+                favoriteFragment.getFavoriteViewModel().getAdapter().getmData().add(data.getExtras().getString("name"));
                 favoriteFragment.getFavoriteViewModel().getAdapter().notifyDataSetChanged();
             } else {   // RESULT_CANCEL.
                 Log.d("뭐지","뭐지");
@@ -273,6 +271,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            ...
         }
 
+    }
+
+    public void goHome(){
+        Fragment fragment = new HomeFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add( R.id.nav_home, fragment );
+        fragmentTransaction.commit();
     }
 
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/round">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,22 +11,26 @@
         android:weightSum="10">
 
 
-        <TextView
+        <Button
             android:id="@+id/favorite_list_text"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="8.5"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
             android:gravity="center"
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
-            android:textSize="30dp" />
+            android:background="#FFFFFF"
+            android:textSize="30sp" />
 
         <Button
             android:id="@+id/button_favorite_delete"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.5"
-            android:text="삭제" />
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/minusbutton" />
+
     </LinearLayout>
 
 </LinearLayout>

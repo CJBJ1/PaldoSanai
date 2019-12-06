@@ -102,12 +102,6 @@ public class SignInActivity extends AppCompatActivity implements
 
             // Signed in successfully, show authenticated UI.
             updateUI(account);
-            Log.d("getDisplayName()",account.getDisplayName() + "");
-            Log.d("getEmail()",account.getEmail() + "");
-            Log.d("getId()",account.getId() + "");
-            Log.d("getIdToken()",account.getIdToken() + "");
-            Log.d("getServerAuthCode()",account.getServerAuthCode() + "");
-            Log.d("getAccount()",account.getAccount() + "");
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.

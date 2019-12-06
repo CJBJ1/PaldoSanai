@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/oval_background_orange_fill"
+        android:background="@drawable/oval_background_orange_blank"
         android:orientation="horizontal">
 
         <Button

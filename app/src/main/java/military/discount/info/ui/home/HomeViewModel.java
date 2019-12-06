@@ -124,24 +124,26 @@ public class HomeViewModel extends ViewModel {
             }
         });
 
-        for (int index =0;index<10;index++) {
+        for (int index =0;index<shopList.getShopArrayList().size();index++) {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(new LatLng(Double.parseDouble(shopList.getShopArrayList().get(index).getLat()), Double.parseDouble(shopList.getShopArrayList().get(index).getLng())));
             mMap.addMarker(markerOptions).setTag(index);
         }
 
 
-        //초기 중심점 중앙대로 설정
-        LatLng center = new LatLng(37.504198, 126.956875);
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions
-                .position(center)
-                .title("마커");
-        mMap.addMarker(markerOptions);
-        mMap.addMarker(new MarkerOptions().position(new LatLng(37.404235,126.545156)));
-        mMap.setOnMarkerClickListener(markerClickListener);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        if(shopList.getCenterPoint()==null) {
+            LatLng center = new LatLng(37.504198, 126.956875);
+            mMap.setOnMarkerClickListener(markerClickListener);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        }
+        else{
+            LatLng center =shopList.getCenterPoint();
+            mMap.setOnMarkerClickListener(markerClickListener);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            shopList.setCenterPoint(null);
+        }
 
     }
 
@@ -176,10 +178,7 @@ public class HomeViewModel extends ViewModel {
                     parseShop(jsArr,index);
                     index++;
                 }
-                for(int i = 0;i<10;i++){
-                    shopList.getShopArrayList().get(i).setLat((37.504198 + 0.05*i) + "");
-                    shopList.getShopArrayList().get(i).setLng((126.956875 + 0.05*i) + "");
-                }
+
                 setMap(mMap,fm,context);
 
             } catch (JSONException e) {
@@ -203,9 +202,10 @@ public class HomeViewModel extends ViewModel {
                 shop.setInformation(jsonObject.getString("information"));
                 shop.setRegistration_num(jsonObject.getString("registration_num"));
                 shop.setActive(jsonObject.getString("active"));
+                shop.setLat(jsonObject.getString("latitude"));
+                shop.setLng(jsonObject.getString("longitude"));
 
                 shopList.getShopArrayList().add(shop);
-                Log.d("하하",shop.getName());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

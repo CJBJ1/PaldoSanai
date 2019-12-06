@@ -1,5 +1,6 @@
 package military.discount.info.ui.favorite;
 
+import android.app.Activity;
 import android.content.Context;
 
 import java.util.ArrayList;
@@ -24,13 +25,12 @@ public class FavoriteViewModel extends ViewModel {
         mText.setValue("자주 가는 장소");
     }
 
-    public void setRecyclerView(RecyclerView recyclerView, Context context){
-        for (int i=0; i<10; i++) {
-            list.add(String.format("TEXT %d", i)) ;
-        }
+    public void setRecyclerView(RecyclerView recyclerView, Context context, Activity activity){
         recyclerView.setLayoutManager(new LinearLayoutManager(context)) ;
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
         adapter = new SimpleTextAdapter(list) ;
+        adapter.setContext(context);
+        adapter.setActivity(activity);
         //recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.line_divider));
         recyclerView.addItemDecoration(new RecyclerDecoration(20));
         recyclerView.setHasFixedSize(true);

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import military.discount.info.R;
+import military.discount.info.RequestHttpURLConnection;
 
 import android.util.Log;
 import android.view.View;
@@ -21,14 +22,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.api.services.people.v1.model.Url;
 
+import org.apache.http.HttpClientConnection;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
@@ -77,6 +83,8 @@ public class IdTokenActivity extends AppCompatActivity implements
                 .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
                 .build();
+
+
         // [END configure_signin]
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -110,27 +118,10 @@ public class IdTokenActivity extends AppCompatActivity implements
     // [START handle_sign_in_result]
     private void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
         try {
+
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             String idToken = account.getIdToken();
-
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://54.180.83.196:8888/auth/login/google-oath2");
-
-            try {
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("idToken", idToken));
-                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                HttpResponse response = httpClient.execute(httpPost);
-                int statusCode = response.getStatusLine().getStatusCode();
-                final String responseBody = EntityUtils.toString(response.getEntity());
-                Log.i(TAG, "Signed in as: " + responseBody);
-            } catch (ClientProtocolException e) {
-                Log.e(TAG, "Error sending ID token to backend.", e);
-            } catch (IOException e) {
-                Log.e(TAG, "Error sending ID token to backend.", e);
-            }
-
+            Log.d("토큰",idToken);
             updateUI(account);
         } catch (ApiException e) {
             Log.w(TAG, "handleSignInResult:error", e);
