@@ -230,6 +230,7 @@ public class HomeViewModel extends ViewModel {
                 shop.setActive(jsonObject.getString("active"));
                 shop.setLat(jsonObject.getString("latitude"));
                 shop.setLng(jsonObject.getString("longitude"));
+                shop.setLikes(jsonObject.getString("likes"));
 
                 shopList.getShopArrayList().add(shop);
             } catch (JSONException e) {

@@ -1,6 +1,7 @@
 package military.discount.info;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,7 +44,9 @@ import military.discount.info.login.IdTokenActivity;
 import military.discount.info.login.ServerAuthCodeActivity;
 import military.discount.info.login.SignInActivity;
 import military.discount.info.ui.favorite.FavoriteFragment;
+import military.discount.info.ui.favorite.FavoriteViewModel;
 import military.discount.info.ui.home.HomeFragment;
+import military.discount.info.ui.home.HomeViewModel;
 import military.discount.info.ui.send.SendFragment;
 import military.discount.info.ui.share.ShareFragment;
 import military.discount.info.ui.info.InfoFragment;
@@ -114,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.bringToFront();
 
@@ -188,20 +192,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().getFragments().get(0);
-        FavoriteFragment favoriteFragment = (FavoriteFragment)navHostFragment.getChildFragmentManager().getFragments().get(0);
+        /*NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().getFragments().get(0);
+        FavoriteFragment favoriteFragment = (FavoriteFragment)navHostFragment.getChildFragmentManager().getFragments().get(0);*/
 
         Log.d("request",requestCode + "");
         Log.d("result",resultCode + "");
         if (requestCode == REQUEST_FAVORITE) {
             if (resultCode == RESULT_FAVORITE ) {
                 Log.d("정확한 전달",data.getExtras().getDouble("lat")+ "");
-                Toast.makeText(getApplicationContext(),"전달!",Toast.LENGTH_LONG).show();
-
+                /*Toast.makeText(getApplicationContext(),"전달!",Toast.LENGTH_LONG).show();
                 LatLng latLng = new LatLng(data.getExtras().getDouble("lat"),data.getExtras().getDouble("lng"));
                 favoriteFragment.getFavoriteViewModel().getAdapter().getPositions().add(latLng);
                 favoriteFragment.getFavoriteViewModel().getAdapter().getmData().add(data.getExtras().getString("name"));
-                favoriteFragment.getFavoriteViewModel().getAdapter().notifyDataSetChanged();
+                favoriteFragment.getFavoriteViewModel().getAdapter().getId().add(data.getExtras().getString("id"));
+                favoriteFragment.getFavoriteViewModel().getAdapter().notifyDataSetChanged();*/
+
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("latitude",data.getExtras().getDouble("lat"));
+                contentValues.put("longitude",data.getExtras().getDouble("lng"));
+                contentValues.put("name",data.getExtras().getString("name"));
+
+                String url = "http://54.180.83.196:8888/favorites/";
+                NetworkTaskMain networkTask = new NetworkTaskMain(url, contentValues);
+                networkTask.execute();
+
             } else {   // RESULT_CANCEL.
                 Log.d("뭐지","뭐지");
                 Toast.makeText(getApplicationContext(),"실패",Toast.LENGTH_LONG).show();
@@ -212,12 +226,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void goHome(){
-        Fragment fragment = new HomeFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add( R.id.nav_home, fragment );
-        fragmentTransaction.commit();
+    public class NetworkTaskMain extends AsyncTask<Void, Void, String> {
+
+        private String url;
+        private ContentValues values;
+
+        public NetworkTaskMain(String url, ContentValues values) {
+
+            this.url = url;
+            this.values = values;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String result = "basic";
+            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
+            requestHttpURLConnection.setAccessToken(shopList.getAccessToken());
+            if(values != null) {
+                result = requestHttpURLConnection.requestPost(url, values);
+            }
+            else{
+                result = requestHttpURLConnection.request(url,null);
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(s==null) {
+                String url = "http://8dosanai.com:8888/favorites/";
+                NetworkTaskMain networkTask = new NetworkTaskMain(url, null);
+                networkTask.execute();
+            }
+
+            else{
+                try {
+                    NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().getFragments().get(0);
+                    FavoriteFragment favoriteFragment = (FavoriteFragment)navHostFragment.getChildFragmentManager().getFragments().get(0);
+
+                    favoriteFragment.getFavoriteViewModel().getAdapter().getPositions().clear();
+                    favoriteFragment.getFavoriteViewModel().getAdapter().getmData().clear();
+                    favoriteFragment.getFavoriteViewModel().getAdapter().getId().clear();
+
+                    int index = 0;
+                    jsArr = new JSONArray(s);
+                    while (index != jsArr.length()) {
+                        JSONObject jsonObject = jsArr.getJSONObject(index);
+                        LatLng latLng = new LatLng(jsonObject.getDouble("latitude"), jsonObject.getDouble("longitude"));
+                        favoriteFragment.getFavoriteViewModel().getAdapter().getPositions().add(latLng);
+                        favoriteFragment.getFavoriteViewModel().getAdapter().getmData().add(jsonObject.getString("name"));
+                        favoriteFragment.getFavoriteViewModel().getAdapter().getId().add(jsonObject.getString("id"));
+                        index++;
+                    }
+
+                    Log.d("어쩔",favoriteFragment.getFavoriteViewModel().getAdapter().getPositions() + "");
+                    Log.d("어쩔",favoriteFragment.getFavoriteViewModel().getAdapter().getId() + "");
+                    Log.d("어쩔",favoriteFragment.getFavoriteViewModel().getAdapter().getmData() + "");
+                    favoriteFragment.getFavoriteViewModel().getAdapter().notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
 }

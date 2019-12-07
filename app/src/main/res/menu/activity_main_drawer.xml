@@ -4,21 +4,22 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_home"
+            android:icon="@drawable/trello_compass_2"
             android:title="Home" />
         <item
             android:id="@+id/nav_favorite"
-            android:icon="@drawable/ic_menu_favorite"
+            android:icon="@drawable/trello_compass"
             android:title="자주 가는 장소" />
         <item
             android:id="@+id/nav_info"
-            android:icon="@drawable/ic_menu_info"
+            android:icon="@drawable/trello_skull"
             android:title="개인 정보 관리" />
         <item
             android:id="@+id/nav_shopReg"
-            android:icon="@drawable/ic_menu_shopreg2"
+            android:icon="@drawable/trello_swimsuit"
             android:title="시설 등록" />
     </group>
 

@@ -44,6 +44,9 @@ public class InfoFragment extends Fragment  {
     private TextView information;
     private TextView phone;
     private TextView url;
+    private TextView likes;
+    private Button modifyButton;
+
     private boolean like;
 
     public InfoFragment(Shop shop){
@@ -62,12 +65,15 @@ public class InfoFragment extends Fragment  {
         information =(TextView)root.findViewById(R.id.textView8);
         phone = (TextView)root.findViewById(R.id.textView9);
         url = (TextView)root.findViewById(R.id.textView10);
+        likes = (TextView)root.findViewById(R.id.textView7);
+        modifyButton = (Button)root.findViewById(R.id.button2);
 
         name.setText(shop.getName());
         address.setText(shop.getAddress());
         information.setText( "-" + shop.getDescription());
         phone.setText("-" + shop.getPhone());
         url.setText("-" + shop.getPage_url());
+        likes.setText(shop.getLikes());
         return root;
     }
 

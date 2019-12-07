@@ -1,7 +1,10 @@
 package military.discount.info;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +27,7 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Vi
 
     private ArrayList<String> mData = null ;
     private ArrayList<LatLng> positions =  new ArrayList<>();
+    private ArrayList<String> id = new ArrayList<>();
     private ShopList shopList;
     private Context context;
     private Activity activity;
@@ -43,8 +47,10 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Vi
     }
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    public SimpleTextAdapter(ArrayList<String> list) {
-        mData = list ;
+    public SimpleTextAdapter(ArrayList<String> mData,ArrayList<LatLng> positions,ArrayList<String> id) {
+        this.mData = mData ;
+        this.positions = positions;
+        this.id = id;
     }
 
 
@@ -62,8 +68,9 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Vi
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(SimpleTextAdapter.ViewHolder holder, final int position) {
-        String text = mData.get(position) ;
-        holder.textButton.setText(text) ;
+        String text = mData.get(position);
+        holder.textButton.setText(text);
+
         holder.textButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -79,6 +86,12 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Vi
             public void onClick(View view) {
                 mData.remove(position); //or some other task
                 positions.remove(position);
+
+                String url = "http://8dosanai.com:8888/favorites/" + id.get(position) + "/";
+                NetworkTaskFavoriteDelete networkTaskFavoriteDelete = new NetworkTaskFavoriteDelete(url,null);
+                networkTaskFavoriteDelete.execute();
+
+                id.remove(position);
                 notifyDataSetChanged();
             }
         });
@@ -100,6 +113,8 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Vi
         return positions;
     }
 
+    public ArrayList<String> getId() {return id;}
+
     public void setContext(Context context){
         this.context = context;
     }
@@ -107,4 +122,37 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Vi
     public void setActivity(Activity activity){
         this.activity = activity;
     }
+
+
+    public class NetworkTaskFavoriteDelete extends AsyncTask<Void, Void, String> {
+
+        private String url;
+        private ContentValues values;
+
+        public NetworkTaskFavoriteDelete(String url, ContentValues values) {
+
+            this.url = url;
+            this.values = values;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String result = "basic";
+            shopList = (ShopList)activity.getApplicationContext();
+            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
+            requestHttpURLConnection.setAccessToken(shopList.getAccessToken());
+            result = requestHttpURLConnection.requestDelete(url, values);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(s!=null) {
+                Log.d("삭제!", s);
+            }
+        }
+
+    }
+
 }

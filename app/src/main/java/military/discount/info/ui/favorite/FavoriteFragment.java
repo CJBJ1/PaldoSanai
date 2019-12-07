@@ -62,9 +62,6 @@ public class FavoriteFragment extends Fragment {
             }
         });
 
-        String url = "http://8dosanai.com:8888/favorites/";
-        NetworkTaskFavorite networkTaskFavorite = new NetworkTaskFavorite(url,null);
-        networkTaskFavorite.execute();
 
         return root;
     }
@@ -74,33 +71,4 @@ public class FavoriteFragment extends Fragment {
     }
 
 
-    public class NetworkTaskFavorite extends AsyncTask<Void, Void, String> {
-
-        private String url;
-        private ContentValues values;
-
-        public NetworkTaskFavorite(String url, ContentValues values) {
-
-            this.url = url;
-            this.values = values;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            String result = "basic";
-            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
-            requestHttpURLConnection.setAccessToken(shopList.getAccessToken());
-            result = requestHttpURLConnection.request(url, values);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if(s!=null) {
-                Log.d("like 확인!", s);
-            }
-        }
-
-    }
 }

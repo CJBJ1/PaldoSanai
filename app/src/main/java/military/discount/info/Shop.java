@@ -18,6 +18,7 @@ public class Shop  {
     private String active;
     private String lat;
     private String lng;
+    private String likes;
 
     public String getId() {
         return id;
@@ -123,5 +124,9 @@ public class Shop  {
     public void setLng(String lng) {
         this.lng = lng;
     }
+
+    public String getLikes() { return likes; }
+
+    public void setLikes(String likes) { this.likes = likes;}
 
 }
