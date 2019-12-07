@@ -64,8 +64,8 @@
 
     <LinearLayout
         android:id="@+id/shopInfo"
-        android:layout_width="419dp"
-        android:layout_height="269dp"
+        android:layout_width="match_parent"
+        android:layout_height="295dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

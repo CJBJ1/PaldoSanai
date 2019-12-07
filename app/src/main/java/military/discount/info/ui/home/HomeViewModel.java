@@ -2,6 +2,8 @@ package military.discount.info.ui.home;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -11,6 +13,7 @@ import android.app.Activity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -45,9 +48,12 @@ public class HomeViewModel extends ViewModel {
     private ShopList shopList;
     private Context context;
     private JSONArray jsArr;
+    private Bitmap smallMarker;
     private GoogleMap mMap;
     private FragmentManager fm;
     private ClusterManager<MyItem> mClusterManager;
+
+    private Marker centerMarker = null;
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
@@ -98,19 +104,20 @@ public class HomeViewModel extends ViewModel {
 
     }
 
-    public void setNetwork(final GoogleMap mMap, final FragmentManager fm,Context context){
+    public void setNetwork(final GoogleMap mMap, final FragmentManager fm,Context context,Bitmap smallMarker){
         shopList = (ShopList)context;
 
         this.mMap=mMap;
         this.fm = fm;
         this.context = context;
+        this.smallMarker = smallMarker;
 
         String url = "http://54.180.83.196:8888/places";
         NetworkTask networkTask = new NetworkTask(url, null);
         networkTask.execute();
     }
 
-    public void setMap(final GoogleMap mMap, final FragmentManager fm,Context context){
+    public void setMap(final GoogleMap mMap, final FragmentManager fm,Context context,Bitmap smallMarker){
 
 
         mClusterManager = new ClusterManager<MyItem>(context, mMap);
@@ -119,7 +126,7 @@ public class HomeViewModel extends ViewModel {
         GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                showShopInfo(fm, Integer.parseInt(marker.getTag().toString()));
+                    showShopInfo(fm, Integer.parseInt(marker.getTag().toString()));
                 return false;
             }
         };
@@ -139,13 +146,25 @@ public class HomeViewModel extends ViewModel {
 
 
         if(shopList.getCenterPoint()==null) {
+
+            if(centerMarker !=null)
+                centerMarker.remove();
+
             LatLng center = new LatLng(37.504198, 126.956875);
             mMap.setOnMarkerClickListener(markerClickListener);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
         }
         else{
-            LatLng center =shopList.getCenterPoint();
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+            markerOptions.position(shopList.getCenterPoint());
+            LatLng center = shopList.getCenterPoint();
+
+            if(centerMarker !=null)
+                centerMarker.remove();
+
+            centerMarker = mMap.addMarker(markerOptions);
             mMap.setOnMarkerClickListener(markerClickListener);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
@@ -186,7 +205,7 @@ public class HomeViewModel extends ViewModel {
                     index++;
                 }
 
-                setMap(mMap,fm,context);
+                setMap(mMap,fm,context,smallMarker);
 
             } catch (JSONException e) {
                 e.printStackTrace();

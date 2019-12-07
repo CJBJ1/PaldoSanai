@@ -16,6 +16,9 @@
     <Button
         android:id="@+id/button_favorite_add"
         android:layout_width="71dp"
+        android:elevation="10dp"
+        android:translationZ="10dp"
+        android:stateListAnimator="@null"
         android:layout_height="69dp"
         android:background="@drawable/plus_click"
         app:layout_constraintBottom_toBottomOf="parent"

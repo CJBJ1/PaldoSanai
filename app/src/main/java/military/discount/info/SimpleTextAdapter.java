@@ -65,6 +65,7 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Vi
         String text = mData.get(position) ;
         holder.textButton.setText(text) ;
         holder.textButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 shopList = (ShopList)activity.getApplicationContext();

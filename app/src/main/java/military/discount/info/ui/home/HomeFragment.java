@@ -3,6 +3,8 @@ package military.discount.info.ui.home;
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -56,9 +59,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private Button minusButton;
     private LinearLayout subLayout;
     private FragmentManager fm ;
+    private Bitmap smallMarker;
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              final ViewGroup container, Bundle savedInstanceState) {
+
+        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.user_marker);
+        Bitmap b=bitmapdraw.getBitmap();
+        smallMarker = Bitmap.createScaledBitmap(b, 200, 200, false);
+
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         homeViewModel.setParentActivity(getActivity());
@@ -112,7 +121,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        homeViewModel.setNetwork(mMap,fm,getActivity().getApplicationContext());
+        homeViewModel.setNetwork(mMap,fm,getActivity().getApplicationContext(),smallMarker);
     }
 
 
