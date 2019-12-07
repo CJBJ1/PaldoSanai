@@ -32,7 +32,7 @@
     <style name="DrawerTextStyle" >
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">"@font/bm"</item>
     </style>
 
 </resources>

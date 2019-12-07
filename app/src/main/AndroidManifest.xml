@@ -29,8 +29,11 @@
             </activity>
 
         <activity
-            android:name="military.discount.info.ui.favorite.FavoriteSelectActivity"
-            android:label="FavoriteSelectActivity">
+            android:name=".ModifyActivity">
+        </activity>
+
+        <activity
+            android:name="military.discount.info.ui.favorite.FavoriteSelectActivity">
         </activity>
 
         <activity

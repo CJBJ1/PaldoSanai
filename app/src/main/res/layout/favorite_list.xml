@@ -20,6 +20,7 @@
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
             android:background="#FFFFFF"
+            android:fontFamily="@font/bm"
             android:textSize="30sp" />
 
         <Button

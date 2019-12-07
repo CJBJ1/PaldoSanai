@@ -2,6 +2,7 @@ package military.discount.info.ui.favorite;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +41,7 @@ public class FavoriteFragment extends Fragment {
 
     private FavoriteViewModel favoriteViewModel;
     private Button deleteButton;
-    private Button addButton;
+    private ImageButton addButton;
     private ShopList shopList;
     private int REQUEST_FAVORITE = 100;
 
@@ -53,7 +55,7 @@ public class FavoriteFragment extends Fragment {
         RecyclerView recyclerView = root.findViewById(R.id.recycler_item) ;
         favoriteViewModel.setRecyclerView(recyclerView,getContext(),getActivity());
 
-        addButton = (Button)root.findViewById(R.id.button_favorite_add);
+        addButton = (ImageButton)root.findViewById(R.id.button_favorite_add);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
